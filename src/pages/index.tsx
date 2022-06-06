@@ -48,13 +48,13 @@ const Home = () => {
 };
 
 function getNewProducts() {
-  return fetch("http://localhost:5000/api/products/?new=true")
+  return fetch(process.env.NEXT_PUBLIC_URL + "/api/products/?new=true")
     .then((res) => res.json())
     .then((data) => data);
 }
 
 function getFeaturedProduct() {
-  return fetch("http://localhost:5000/api/products/?featured=true")
+  return fetch(process.env.NEXT_PUBLIC_URL + "/api/products/?featured=true")
     .then((res) => res.json())
     .then((data) => data);
 }

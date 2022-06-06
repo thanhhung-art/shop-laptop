@@ -8,7 +8,7 @@ const nextConfig = {
     return [
       {
         source: '/api/:slug*',
-        destination: 'http://localhost:5000/api/:slug*',
+        destination: 'https://shop-laptop-server.vercel.app/api/:slug*',
       },
     ]
   },

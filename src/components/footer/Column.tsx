@@ -1,11 +1,15 @@
 import { Grid, Typography, Box } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { useState } from "react";
-import useWindowDimensions from "../GetWindowDimensions";
+import { useState, useEffect } from "react";
 
 const Column = ({ title, arrText }: { title: string; arrText: string[] }) => {
-  const { width } = useWindowDimensions();
+  const [width, setWidth] = useState(0);
+
+  useEffect(() => {
+    setWidth(window.innerWidth);
+  }, [window.innerWidth])
+
   const [style, setStyle] = useState<{
     mt: string;
     gap: string;
