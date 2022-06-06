@@ -216,7 +216,7 @@ export default function SignIn() {
               <Grid container>
                 <Grid item>
                   <Typography variant="caption">
-                    Don't have an account?{" "}
+                    Don&#39;t have an account?{" "}
                     <Link href="/signup">
                       <a style={{ color: "#333" }}>Sign Up</a>
                     </Link>

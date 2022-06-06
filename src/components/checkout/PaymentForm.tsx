@@ -76,7 +76,7 @@ export default function PaymentForm() {
         </Grid>
         <Grid item xs={12}>
           <Typography variant="caption" sx={{color: "#7c7878", display: "block" }}>*fill full field to payment with your card</Typography>
-          <Typography variant="caption" sx={{color: "#7c7878"}}>*If you don't want to use card to payment, click next button</Typography>
+          <Typography variant="caption" sx={{color: "#7c7878"}}>*If you don&#39;t want to use card to payment, click next button</Typography>
         </Grid>
       </Grid>
     </React.Fragment>
