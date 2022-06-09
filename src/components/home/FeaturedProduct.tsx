@@ -9,6 +9,7 @@ import {
   Grid,
   Rating,
   Stack,
+  Skeleton,
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -19,6 +20,8 @@ import { useDispatch } from "react-redux";
 import { addProduct } from "../../features/cart/cartSlice";
 import { UseQueryResult } from "react-query";
 import { countRating } from "../../utils/utils";
+import ProductPlaceholder from "../product/ProductPlaceholder";
+
 
 const FeaturedProduct = ({
   featuredProducts,
@@ -38,48 +41,61 @@ const FeaturedProduct = ({
         </Box>
       </Box>
       <Grid container spacing={2} sx={{ mt: 2 }}>
-        {featuredProducts.data &&
-          featuredProducts.data.map((product) => (
-            <Grid item lg={3} sm={12} key={product._id}>
-              <Card
-                sx={{
-                  padding: ".5rem",
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
+        {featuredProducts.isLoading
+          ? Array(4)
+              .fill(1)
+              .map((e, i) => (
+                <ProductPlaceholder key={i} lg={3} sm={12} />
+              ))
+          : featuredProducts.data &&
+            featuredProducts.data.map((product) => (
+              <Grid item lg={3} sm={12} key={product._id}>
+                <Card
+                  sx={{
+                    padding: ".5rem",
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
 
-                  "&:hover .card-icons": {
-                    transform: "translateY(0)",
-                    transition: "all 0.4s",
-                  }
-                }}
-                
-              >
-                <Box display="flex" justifyContent="center">
-                  <CardMedia>
-                    <Link href={`/product/${product._id}`}>
-                      <a>
-                        <Image src={product.img} width={250} height={140} />
-                      </a>
-                    </Link>
-                  </CardMedia>
-                </Box>
-                <Box
-                  sx={{ pr: "1rem", overflow: "hidden" }}
-                  display="flex"
-                  justifyContent="end"
+                    "&:hover .card-icons": {
+                      transform: "translateY(0)",
+                      transition: "all 0.4s",
+                    },
+                  }}
                 >
-                  <Box
-                    sx={{ transform: "translateY(50px)" }}
-                    className="card-icons"
-                  >
-                    <FavoriteIcon fontSize="large" sx={styleIcons} />
-                    <span onClick={() => dispatch(addProduct(product))}>
-                      <ShoppingCartIcon fontSize="large" sx={styleIcons} />
-                    </span>
+                  <Box display="flex" justifyContent="center">
+                    <CardMedia>
+                      <Link href={`/product/${product._id}`}>
+                        <a>
+                          <Image src={product.img} width={250} height={140} />
+                        </a>
+                      </Link>
+                    </CardMedia>
                   </Box>
-                </Box>
-                <CardContent sx={{ pt: 2, zIndex: 2,display: "flex", flexDirection: "column" , flex: 1 }}>
+                  <Box
+                    sx={{ pr: "1rem", overflow: "hidden" }}
+                    display="flex"
+                    justifyContent="end"
+                  >
+                    <Box
+                      sx={{ transform: "translateY(50px)" }}
+                      className="card-icons"
+                    >
+                      <FavoriteIcon fontSize="large" sx={styleIcons} />
+                      <span onClick={() => dispatch(addProduct(product))}>
+                        <ShoppingCartIcon fontSize="large" sx={styleIcons} />
+                      </span>
+                    </Box>
+                  </Box>
+                  <CardContent
+                    sx={{
+                      pt: 2,
+                      zIndex: 2,
+                      display: "flex",
+                      flexDirection: "column",
+                      flex: 1,
+                    }}
+                  >
                     <Link href={`/product/${product._id}`}>
                       <Typography
                         variant="subtitle1"
@@ -99,10 +115,10 @@ const FeaturedProduct = ({
                     <Typography variant="subtitle1">
                       $ {product.price}
                     </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
       </Grid>
     </Container>
   );

@@ -28,6 +28,7 @@ import {
 } from "react-query";
 import { getInfiniteProducts } from "../utils/fetch";
 import Footer from "../components/Footer";
+import ProductPlaceholder from "../components/product/ProductPlaceholder";
 
 const SelectContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -206,22 +207,7 @@ const Products = () => {
                 return (
                   <>
                     {[...Array(9)].map((_, index) => (
-                      <Grid item xs={6} lg={4} key={index}>
-                        <Card>
-                          <CardContent>
-                            <ImagePlaceholder variant="rectangular"/>
-                          </CardContent>
-                          <CardContent>
-                            <Skeleton variant="text" />
-                            <Skeleton variant="text" />
-                            <Skeleton variant="text" />
-                          </CardContent>
-                          <CardContent>
-                            <Skeleton variant="text" width={140} />
-                            <Skeleton variant="text" width={140} />
-                          </CardContent>
-                        </Card>
-                      </Grid>
+                      <ProductPlaceholder key={index} xs={6} lg={4} />
                     ))}
                   </>
                 );

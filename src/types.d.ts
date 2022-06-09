@@ -77,8 +77,17 @@ declare interface Product {
   color: string;
   instock: boolean;
   reviews: UserReview[];
+  isnew: boolean;
 }
 
+declare interface ProductBanner {
+  id: number;
+  name: string;
+  price: number;
+  img: string;
+  desc: string;
+  isnew: boolean;
+}
 declare interface NewProductsQuery {
   isLoading: boolean;
   error: string | null;
@@ -135,7 +144,7 @@ declare interface PostReviewProduct {
     review: string;
     rating: number;
     userImg: string;
-  }
+  };
 }
 
 //---------- cart type -----------//

@@ -14,14 +14,6 @@ import "swiper/css";
 
 SwiperCore.use([Autoplay]);
 
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  img: string;
-  desc: string;
-  isnew: boolean;
-}
 
 const Desc = styled(Typography)(({ theme }) => ({
   heigth: 224,
@@ -40,7 +32,7 @@ const Container = styled(Grid)(({ theme }) => ({
   },
 }));
 
-function Content({ id, name, price, img, desc, isnew }: Product) {
+function Content({ id, name, price, img, desc, isnew }: ProductBanner) {
   return (
     <Paper sx={{mb: 4}}>
       <Container container justifyContent="center">

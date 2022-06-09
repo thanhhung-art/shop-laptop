@@ -17,7 +17,7 @@ const BoxStyled = styled(Box)(({theme}) => ({
 }));
 
 const Wrapper = styled(Box)(({theme}) => ({
-  height: "20vh",
+  height: "21vh",
   display: "flex",
   justifyContent: "center",
   mt: 4,

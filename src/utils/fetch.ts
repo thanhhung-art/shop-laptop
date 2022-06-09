@@ -11,3 +11,16 @@ export async function getInfiniteProducts({
   const data = await res.json();
   return data;
 }
+ 
+export function getNewProducts() {
+  const header = new Headers({"Access-Control-Allow-Origin": "*"});
+  return fetch(process.env.NEXT_PUBLIC_URL + "/api/products/?new=true", {headers: header})
+    .then((res) => res.json())
+    .then((data) => data);
+}
+
+export function getFeaturedProduct() {
+  return fetch(process.env.NEXT_PUBLIC_URL + "/api/products/?featured=true")
+    .then((res) => res.json())
+    .then((data) => data);
+}

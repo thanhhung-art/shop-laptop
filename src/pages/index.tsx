@@ -1,30 +1,25 @@
 import Head from "next/head";
 import Slider from "../components/home/Slider";
 import FeaturedProduct from "../components/home/FeaturedProduct";
-import Commit from "../components/Commit";
+import Commit from "../components/home/Commit";
 import TopNewArrivals from "../components/home/TopNewArrivels";
 import Footer from "../components/Footer";
-import { QueryClient, dehydrate, useQuery, useMutation } from "react-query";
+import { QueryClient, dehydrate, useQuery } from "react-query";
 import { useLayoutEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "../features/user/userSlice";
-import { callCheckAuth } from "../utils/fetch";
+import { getNewProducts, getFeaturedProduct } from "../utils/fetch";
+import { Box } from "@mui/material";
 
-const Home = () => {
+const Home = ({authencation}: {authencation: boolean}) => {
   const dispatch = useDispatch();
   const featuredProducts = useQuery<Product[]>("getFeaturedProduct", getFeaturedProduct);
   const newProducts = useQuery<Product[]>("getNewProducts", getNewProducts);
 
-  const checkAuth = useMutation(callCheckAuth, {
-    onSuccess: (data) => {
-      if (!data.success) {
-        dispatch(setUser({_id: "", email: "", username: "", password: "", address: ""}));
-      }
-    }
-  })
-
   useLayoutEffect(() => {
-    checkAuth.mutate();
+    if (!authencation) {
+      dispatch(setUser({_id: "", email: "", username: "", password: "", address: ""}));
+    }
   },[])
 
   return (
@@ -36,9 +31,11 @@ const Home = () => {
       </Head>
       <main>
         <header>
-          <Slider />
+          <Box>
+            <Slider />
+            <Commit />
+          </Box>
         </header>
-        <Commit />
         <FeaturedProduct featuredProducts={featuredProducts} />
         <TopNewArrivals newProducts={newProducts} />
       </main>
@@ -47,27 +44,22 @@ const Home = () => {
   );
 };
 
-function getNewProducts() {
-  return fetch(process.env.NEXT_PUBLIC_URL + "/api/products/?new=true")
-    .then((res) => res.json())
-    .then((data) => data);
-}
-
-function getFeaturedProduct() {
-  return fetch(process.env.NEXT_PUBLIC_URL + "/api/products/?featured=true")
-    .then((res) => res.json())
-    .then((data) => data);
-}
-
-export async function getServerSideProps() {
+export async function getServerSideProps({req}: {req: any}) {
+  
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery("getNewProducts", getNewProducts);
   await queryClient.prefetchQuery("getFeaturedProducts", getFeaturedProduct);
 
+  if (req.cookies.authtokenadmin || req.cookies.authtokenuser) { 
+    return {
+      props: { dehydratedState: dehydrate(queryClient), authencation: true },
+    }
+  }
+
   return {
-    props: { dehydratedState: dehydrate(queryClient) },
-  };
+    props: {dehydratedState: dehydrate(queryClient), authencation: false},
+  }
 }
 
 export default Home;
