@@ -19,13 +19,11 @@ const ImagePlaceholder = styled(Skeleton)(({ theme }) => ({
 }));
 
 const ProductPlaceholder = ({
-  key,
   lg,
   md,
   sm,
   xs,
 }: {
-  key: number;
   lg?: number;
   md?: number;
   sm?: number;
@@ -37,7 +35,6 @@ const ProductPlaceholder = ({
   return (
     <Grid
       item
-      key={key}
       xs={checkProps(xs)}
       lg={checkProps(lg)}
       md={checkProps(md)}
