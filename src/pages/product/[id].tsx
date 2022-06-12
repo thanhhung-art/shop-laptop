@@ -60,10 +60,6 @@ const ProductName = styled(Typography)(({ theme }) => ({
   },
 }));
 
-type Obj = {
-  [key: string]: number;
-};
-
 const Product = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -221,7 +217,7 @@ const Product = () => {
           <Box>
             <Box sx={{ ml: 2 }}>
               <Box display="flex" alignItems="center" gap={0.4}>
-                <Typography variant="h6" fontWeight="bold" fontSize={24}>
+                <Typography variant="h6" fontWeight="bold" fontSize={25}>
                   {data ? data && countRating(data.reviews) : 0}
                 </Typography>{" "}
                 <StarIcon fontSize="medium" sx={{ color: "#ffc107" }} />
@@ -229,17 +225,22 @@ const Product = () => {
               <Box>
                 {[5, 4, 3, 2, 1].map((value, i) => (
                   <Box key={i} display="flex" gap={1} alignItems="center">
-                    <Box display="flex" alignItems="center">  
-                      <Typography variant="subtitle2" fontSize={18} fontWeight="bold">
+                    <Box display="flex" alignItems="center">
+                      <Typography
+                        variant="subtitle2"
+                        fontSize={18}
+                        fontWeight="bold"
+                        sx={{mt: 0.2}}
+                      >
                         {value}
                       </Typography>{" "}
-                      <Box>
-                        <StarIcon fontSize="small" sx={{ color: "#ffc107" }} />
-                      </Box>
-
+                      <StarIcon
+                        fontSize="small"
+                        sx={{ color: "#ffc107" }}
+                      />
                     </Box>
                     <Box>
-                      <Typography variant="subtitle2" fontSize={18}>
+                      <Typography variant="subtitle2" fontSize={15}>
                         {ratings[value - 1]} users
                       </Typography>
                     </Box>
