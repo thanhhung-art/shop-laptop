@@ -11,6 +11,7 @@ import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Autoplay } from "swiper";
 import "swiper/css";
+import Link from "next/link";
 
 SwiperCore.use([Autoplay]);
 
@@ -44,11 +45,11 @@ function Content({ id, name, price, img, desc, isnew }: ProductBanner) {
           spacing={3}
         >
           <Grid container item lg={7} md={12} sm={12} justifyContent="center">
-            <Box display="flex" justifyContent="center" alignItems="center" height={320}>
-              {id == 1 && <Image src={img} width={850} height={350} priority />}
-              {id == 2 && <Image src={img} width={700} height={600} priority />}
-              {id == 3 && <Image src={img} width={600} height={495} priority />}
-              {id == 4 && <Image src={img} width={400} height={400} priority />}
+            <Box display="flex" justifyContent="center" alignItems="center" height={320} width={'100%'} sx={{position: "relative"}}>
+              {name == "Macbook Pro" && <Image src={img} width={965} height={326} priority />}
+              {name == "Dell Latitude 7420" && <Image src={img} width={814} height={413} priority />}
+              {name == "Hp Omen" && <Image src={img} width={693} height={590} priority />}
+              {name == "Asus Zenbook Duo" && <Image src={img} width={479} height={479} priority />}
             </Box>
           </Grid>
           <Grid
@@ -70,13 +71,15 @@ function Content({ id, name, price, img, desc, isnew }: ProductBanner) {
               <Desc variant="h3" align="center" maxWidth={600}>
                 {desc}
               </Desc>
-              <Typography variant="h6" align="center">
-                from ${price}
+              <Typography variant="h6" align="center" fontWeight="bold">
+                ${price}
               </Typography>
               <Box display="flex" justifyContent={"center"}>
-                <Button variant="contained" sx={{ borderRadius: "1.5rem" }}>
-                  BUY
-                </Button>
+                <Link href={'/product/'+id}>
+                  <Button variant="contained" sx={{ borderRadius: "1.5rem" }}>
+                    BUY
+                  </Button>
+                </Link>
               </Box>
             </Box>
           </Grid>
@@ -89,33 +92,33 @@ function Content({ id, name, price, img, desc, isnew }: ProductBanner) {
 const Slider = () => {
   const products = [
     {
-      id: 1,
+      id: '625a934376f86e029bf17c4d',
       name: "Macbook Pro",
-      price: 1000,
+      price: 2182.87,
       image: "/static/images/Macbook_Banner.jpg",
       desc: "Supercharged for pros.",
       isNew: true,
     },
     {
-      id: 2,
+      id: "62a9c16e9090cd80ad036ec6",
       name: "Dell Latitude 7420",
-      price: 1000,
+      price: 1669.00,
       image: "/static/images/Dell_banner (3).webp",
       desc: "Ultra-premium. Ultra-intelligent.",
       isNew: true,
     },
     {
-      id: 3,
-      name: "HP Omen",
-      price: 1000,
-      image: "/static/images/HP_banner_omen.jpg",
+      id: "62a9c54ed503a87be1503587",
+      name: "Hp Omen",
+      price: 1649.99,
+      image: "/static/images/Hp_banner_omen.jpg",
       desc: "Powerhouse laptops for creators on the move",
       isNew: true,
     },
     {
-      id: 4,
+      id: "product/62a9c896a01efcc3472f1fda",
       name: "Asus Zenbook Duo",
-      price: 1000,
+      price: 1398,
       image: "/static/images/Asus_banner (1).jpg",
       desc: "The product of future",
       isNew: true,

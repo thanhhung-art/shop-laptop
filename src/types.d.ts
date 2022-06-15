@@ -81,7 +81,7 @@ declare interface Product {
 }
 
 declare interface ProductBanner {
-  id: number;
+  id: string;
   name: string;
   price: number;
   img: string;

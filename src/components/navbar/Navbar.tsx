@@ -75,7 +75,7 @@ function Navbar() {
             <Logo>
               <Link href="/">
                 <a>
-                  <Typography variant="subtitle1">lapnew</Typography>
+                  <Typography variant="subtitle1" fontWeight="bold">shop laptop</Typography>
                 </a>
               </Link>
             </Logo>
