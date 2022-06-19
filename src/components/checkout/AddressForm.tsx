@@ -5,32 +5,51 @@ import TextField from "@mui/material/TextField";
 import { useTypedSelector } from "../../app/store";
 import { useDispatch } from "react-redux";
 import { editUserInfo } from "../../features/orderInfo/orderInfoSlice";
+import { useQuery } from "react-query";
 
 export default function AddressForm() {
-  const userSaved = useTypedSelector((state) => state.user.info);
+  const userID = useTypedSelector((state) => state.user.info._id);
+  const userSaved = useQuery<User>(
+    ["getProduct", userID],
+    () => {
+      return fetch(`/api/users/find/${userID}`).then((res) => res.json());
+    },
+    {
+      enabled: userID ? true : false,
+    }
+  );
+
   const [values, setValues] = useState<{
     username: string;
     address: string;
     phone: string;
     email: string;
   }>({
-    username: userSaved?.username || "",
-    email: userSaved?.email || "",
-    phone: userSaved?.phone || "",
-    address: userSaved?.address || "",
+    username: userSaved.data?.username || "",
+    email: userSaved.data?.email || "",
+    phone: userSaved.data?.phone || "",
+    address: userSaved.data?.address || "",
   });
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(editUserInfo(values));
-  },[]);
+    setValues({
+      username: userSaved.data?.username || "",
+      email: userSaved.data?.email || "",
+      phone: userSaved.data?.phone || "",
+      address: userSaved.data?.address || "",
+    });
+    dispatch(editUserInfo({ ...values }));
+  }, [userSaved.data]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({
       ...values,
       [event.target.name]: event.target.value,
     });
-    dispatch(editUserInfo({ ...values, [event.target.name]: event.target.value }));
+    dispatch(
+      editUserInfo({ ...values, [event.target.name]: event.target.value })
+    );
   };
 
   return (

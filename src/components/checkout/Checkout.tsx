@@ -149,6 +149,7 @@ export default function Checkout() {
                     variant="contained"
                     onClick={handleNext}
                     sx={{ mt: 3, ml: 1 }}
+                    disabled={user.address === "" || user.phone === "" || user.email === ""}
                   >
                     {activeStep === steps.length - 1 ? "Place order" : "Next"}
                   </Button>

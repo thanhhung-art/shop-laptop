@@ -20,6 +20,16 @@ const Account = () => {
     { enabled: !!id }
   );
 
+  const userInfo = useQuery<User>(
+    ["getUser", id],
+    () => {
+      return fetch("/api/users/find/" + id).then(res => res.json())
+    },
+    {
+      enabled: id !== undefined,
+    }
+  )
+
   const handleLogout = useMutation(() => fetch("/api/auth/logout", {
     method: "POST",
   }), {
@@ -61,10 +71,10 @@ const Account = () => {
           </Box>
           <Grid container spacing={3}>
             <Grid item lg={4} md={6} xs={12}>
-              <AccountProfile />
+              <AccountProfile userInfo={userInfo} />
             </Grid>
             <Grid item lg={8} md={6} xs={12}>
-              <AccountProfileDetails />
+              <AccountProfileDetails userInfo={userInfo} />
             </Grid>
             <Grid item xs={12}>
               <Paper sx={{ mt: 2 }}>

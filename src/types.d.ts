@@ -196,3 +196,22 @@ declare interface OrderInfo {
   payment: string;
   note: string;
 }
+
+//---------- review type -----------//
+
+declare interface Review {
+  name: string;
+  userId: string;
+  rating: number;
+  review: string;
+  userImg: string;
+  reply: [
+    {
+      name: string;
+      userId: string;
+      userImg: string;
+      content: string;
+      isAdmin: boolean;
+    }
+  ];
+}

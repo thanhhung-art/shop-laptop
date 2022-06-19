@@ -88,13 +88,12 @@ export default function SignIn() {
           password: "",
         },
       });
-      dispatch(setUser(data.user));
+      dispatch(setUser({_id: data.user._id}));
       router.push("/");
     },
   })
   
   const dispatch = useDispatch();
-  const userState = useTypedSelector((state) => state.user);
   const [hide, setHide] = React.useState(true);
   
   const router = useRouter();
@@ -207,7 +206,7 @@ export default function SignIn() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                {userState.status === "loading" ? (
+                {postData.isLoading ? (
                   <CircularProgress />
                 ) : (
                   "Sign In"

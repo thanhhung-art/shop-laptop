@@ -14,7 +14,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import Navbar from "../components/navbar/Navbar";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import InputAdornment from "@mui/material/InputAdornment";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -69,8 +68,8 @@ export default function SignIn() {
           email: ""
         }
       })
-      dispatch(setUser(data))
-      router.push("/");
+      dispatch(setUser({_id: data._id}))
+      router.push("/login");
     }
   })
 

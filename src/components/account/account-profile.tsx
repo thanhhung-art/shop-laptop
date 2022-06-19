@@ -20,13 +20,17 @@ import {
 import { app } from "../../firebase/index";
 import { setUser } from "../../features/user/userSlice";
 import { useDispatch } from "react-redux";
-import DisplayToast, {notify} from "../DisplayToast";
+import DisplayToast, { notify } from "../DisplayToast";
+import { UseQueryResult } from "react-query";
 
 const storage = getStorage(app);
 
-export const AccountProfile = () => {
+export const AccountProfile = ({
+  userInfo,
+}: {
+  userInfo: UseQueryResult<User>;
+}) => {
   const dispatch = useDispatch();
-  const user = useTypedSelector((state) => state.user.info);
   const [file, setFile] = useState<File>();
   const [linkToImage, setLinkToImage] = useState("");
 
@@ -80,18 +84,23 @@ export const AccountProfile = () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             // post data to server
             (async function () {
-              const data = { img: downloadURL };
-              const response = await fetch(`/api/users/${user._id}`, {
-                method: "PUT",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data),
-              });
+              if (userInfo.data) {
+                const data = { img: downloadURL };
+                const response = await fetch(
+                  `/api/users/${userInfo.data._id}`,
+                  {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                  }
+                );
 
-              const userInfo = await response.json();
-              dispatch(setUser(userInfo));
-              notify("Successfully updated profile picture");
+                const res = await response.json();
+                dispatch(setUser(res));
+                notify("Successfully updated profile picture");
+              }
             })();
           });
         }
@@ -113,7 +122,7 @@ export const AccountProfile = () => {
             }}
           >
             <Avatar
-              src={linkToImage || user.img}
+              src={linkToImage || userInfo.data?.img}
               sx={{
                 height: 64,
                 mb: 2,
@@ -121,7 +130,7 @@ export const AccountProfile = () => {
               }}
             />
             <Typography color="textPrimary" gutterBottom variant="h5">
-              {user.username}
+              {userInfo.data?.username}
             </Typography>
           </Box>
         </CardContent>

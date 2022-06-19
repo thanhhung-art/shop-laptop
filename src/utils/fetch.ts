@@ -4,6 +4,11 @@ export async function callCheckAuth () {
     .then(res => res.json())
 }
 
+export async function getUser (id: string) {
+  return fetch("/api/users/find/" + id)
+    .then(res => res.json())
+}
+
 export async function getInfiniteProducts({
   pageParam = 0,
 }): Promise<{ next: number; products: Product[] }> {

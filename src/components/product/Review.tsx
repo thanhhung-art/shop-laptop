@@ -11,87 +11,58 @@ import {
   Grid,
 } from "@mui/material";
 import { useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useTypedSelector } from "../../app/store";
+import { notify } from "../DisplayToast";
 
-const Wrapper = styled(Box)(({ theme }) => ({
-  display: "flex",
-
-  [theme.breakpoints.down("sm")]: {
-    flexDirection: "column",
-  },
-}));
-
-const ContainerUser = styled(Box)(({ theme }) => ({
-  display: "flex",
-  alignItems: "start",
-  gap: 1,
-  justifyContent: "left",
-  paddingLeft: 10,
-  minWidth: 200,
-  marginRight: 20,
-
-  [theme.breakpoints.down("sm")]: {
-    justifyContent: "left",
-  },
-}));
-
-interface Review {
-  name: string;
-  userId: string;
-  rating: number;
-  review: string;
-  userImg: string;
-  reply: [
-    {
-      name: string;
-      userId: string;
-      userImg: string;
-      content: string;
-      isAdmin: boolean;
-    }
-  ];
-}
-
-const Review = ({ review, pid }: { review: UserReview; pid: string; }) => {
+const Review = ({ review, pid }: { review: UserReview; pid: string }) => {
+  const userId = useTypedSelector((state) => state.user.info._id);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
   const [replies, setReplies] = useState(review.reply);
 
   const handleValue = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
-  }
+  };
 
-  const user = useTypedSelector((state) => state.user.info);
+  const user = useQuery(["getUser", userId], () => {
+    return fetch("/api/users/find/" + userId).then((res) => res.json());
+  })
 
   const handleClick = () => setOpen(!open);
 
-  const postReply = useMutation((values: UserReply) => {
-    return fetch(`/api/products/reply/${pid}/${review.userId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+  const postReply = useMutation(
+    (values: UserReply) => {
+      return fetch(`/api/products/reply/${pid}/${review.userId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      }).then((res) => res.json());
+    },
+    {
+      onSuccess: (data) => {
+        const temp = [...replies, data.latestReply];
+        setReplies(temp);
       },
-      body: JSON.stringify(values),
-    }).then(res => res.json());
-  }, {
-    onSuccess: (data) => {
-      const temp = [...replies, data.latestReply];
-      setReplies(temp);
     }
-  })
+  );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    postReply.mutate({
-      name: user.username,
-      userId: user._id,
-      userImg: user.img,
-      content: value,
-      isAdmin: user.isadmin,
-    })
-
-    setValue("");
+    if (userId) {
+      postReply.mutate({
+        name: user.data.username,
+        userId: user.data._id,
+        userImg: user.data.img,
+        content: value,
+        isAdmin: user.data.isadmin,
+      });
+      setValue("");
+    } else {
+      notify("Please login to reply");
+    }
   };
 
   return (
@@ -101,7 +72,9 @@ const Review = ({ review, pid }: { review: UserReview; pid: string; }) => {
           <Box display="flex" sx={{ gap: 1, flexDirection: "column", mt: 3 }}>
             <Box display="flex" alignItems="center" sx={{ gap: 1 }}>
               <Avatar src={review.userImg} />
-              <Typography variant="subtitle1" fontWeight="bold">{review.name}</Typography>
+              <Typography variant="subtitle1" fontWeight="bold">
+                {review.name}
+              </Typography>
             </Box>
           </Box>
         </Grid>
@@ -129,7 +102,7 @@ const Review = ({ review, pid }: { review: UserReview; pid: string; }) => {
                 key={reply.userId}
               >
                 <Box>
-                  <Avatar src={reply.userImg} sx={{height: 30, width: 30}} />
+                  <Avatar src={reply.userImg} sx={{ height: 30, width: 30 }} />
                 </Box>
                 <Box>
                   <Stack>

@@ -156,6 +156,7 @@ const Product = () => {
                     fullWidth
                     sx={{ mt: 4 }}
                     onClick={hanldeClick}
+                    disabled={!data?.instock}
                   >
                     ADD TO CART
                   </Button>
@@ -166,6 +167,7 @@ const Product = () => {
                       fullWidth
                       sx={{ mt: 1 }}
                       onClick={hanldeClick}
+                      disabled={!data?.instock}
                     >
                       BUY NOW
                     </Button>

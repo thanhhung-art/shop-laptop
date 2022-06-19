@@ -26,6 +26,8 @@ import PersonIcon from "@mui/icons-material/Person";
 import Link from "next/link";
 import { useTypedSelector } from "../../app/store";
 import Search from "./Search";
+import { useQuery } from "react-query";
+import { useDispatch } from "react-redux";
 
 const Logo = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
@@ -59,6 +61,10 @@ function Navbar() {
   const cart = useTypedSelector((state) => state.cart);
   const user = useTypedSelector((state) => state.user.info);
   const [openSidebar, setOpenSidebar] = React.useState(false);
+
+  const {data, isLoading} = useQuery<User>(["getUser", user._id], () => fetch("/api/users/find/" + user._id).then(res => res.json()), {
+    enabled: user._id ? true : false
+  })
 
   const handleCLoseSidebar = () => setOpenSidebar(false);
 
@@ -119,10 +125,10 @@ function Navbar() {
                   </a>
                 </Link>
                 <AvatarContainer>
-                  {user && user._id ? ( 
+                  {data && user._id ? (
                     <Link href={`/account/${user._id}`}>
                       <a>
-                        <Avatar src={user.img} alt={user.username} />
+                        <Avatar src={data.img} alt={data.username} />
                       </a>
                     </Link>
                   ) : (
@@ -186,12 +192,12 @@ function Navbar() {
                 </a>
               </Link>
             </ListItem>
-            {user && user._id ? (
+            {data && data._id ? (
               <ListItem>
                 <ListItemIcon>
                   <AccountCircleIcon />
                 </ListItemIcon>
-                <Link href={`/account/${user._id}`}>
+                <Link href={`/account/${data._id}`}>
                   <a style={{color: "#333"}}>
                     <ListItemText onClick={handleCLoseSidebar}>Account</ListItemText>
                   </a>
